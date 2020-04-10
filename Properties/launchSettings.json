@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "Search": {
+      "commandName": "Project",
+      "commandLineArgs": "\"RobotNav.txt\" \"GUI\"",
+      "workingDirectory": "$(SolutionDir)"
+    }
+  }
+}
