@@ -31,6 +31,9 @@ namespace Search
                 case 3:
                     enviroment.Agent.setSearch("AS");
                     break;
+                case 4:
+                    enviroment.Agent.setSearch("MDS");
+                    break;
                 default:
                     break;
             }

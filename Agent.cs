@@ -31,8 +31,9 @@ namespace Search
                 case "AS":
                     searchMethod = new AS(this, enviroment);
                     break;
-                case "CUS1":
-                    return false;
+                case "MDS":
+                    searchMethod = new MDS(this, enviroment);
+                    break;
                 case "CUS2":
                     return false;
                 default:

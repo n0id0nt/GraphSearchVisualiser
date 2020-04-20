@@ -9,3 +9,14 @@ C:\Users\H1Ber\OneDrive\Documents\uni-files\Intro to AI\Assignment 1\Search\obj\
 C:\Users\H1Ber\OneDrive\Documents\uni-files\Intro to AI\Assignment 1\Search\obj\Debug\netcoreapp2.1\Search.AssemblyInfo.cs
 C:\Users\H1Ber\OneDrive\Documents\uni-files\Intro to AI\Assignment 1\Search\obj\Debug\netcoreapp2.1\Search.dll
 C:\Users\H1Ber\OneDrive\Documents\uni-files\Intro to AI\Assignment 1\Search\obj\Debug\netcoreapp2.1\Search.pdb
+C:\Users\H1Ber\OneDrive\Documents\uni-files\Intro to AI\Assignment 1\GraphSearchVisualiser\bin\Debug\netcoreapp2.1\Search.deps.json
+C:\Users\H1Ber\OneDrive\Documents\uni-files\Intro to AI\Assignment 1\GraphSearchVisualiser\bin\Debug\netcoreapp2.1\Search.runtimeconfig.json
+C:\Users\H1Ber\OneDrive\Documents\uni-files\Intro to AI\Assignment 1\GraphSearchVisualiser\bin\Debug\netcoreapp2.1\Search.runtimeconfig.dev.json
+C:\Users\H1Ber\OneDrive\Documents\uni-files\Intro to AI\Assignment 1\GraphSearchVisualiser\bin\Debug\netcoreapp2.1\Search.dll
+C:\Users\H1Ber\OneDrive\Documents\uni-files\Intro to AI\Assignment 1\GraphSearchVisualiser\bin\Debug\netcoreapp2.1\Search.pdb
+C:\Users\H1Ber\OneDrive\Documents\uni-files\Intro to AI\Assignment 1\GraphSearchVisualiser\obj\Debug\netcoreapp2.1\Search.csprojAssemblyReference.cache
+C:\Users\H1Ber\OneDrive\Documents\uni-files\Intro to AI\Assignment 1\GraphSearchVisualiser\obj\Debug\netcoreapp2.1\Search.csproj.CoreCompileInputs.cache
+C:\Users\H1Ber\OneDrive\Documents\uni-files\Intro to AI\Assignment 1\GraphSearchVisualiser\obj\Debug\netcoreapp2.1\Search.AssemblyInfoInputs.cache
+C:\Users\H1Ber\OneDrive\Documents\uni-files\Intro to AI\Assignment 1\GraphSearchVisualiser\obj\Debug\netcoreapp2.1\Search.AssemblyInfo.cs
+C:\Users\H1Ber\OneDrive\Documents\uni-files\Intro to AI\Assignment 1\GraphSearchVisualiser\obj\Debug\netcoreapp2.1\Search.dll
+C:\Users\H1Ber\OneDrive\Documents\uni-files\Intro to AI\Assignment 1\GraphSearchVisualiser\obj\Debug\netcoreapp2.1\Search.pdb

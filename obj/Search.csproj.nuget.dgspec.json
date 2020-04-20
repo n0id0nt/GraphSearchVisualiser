@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\H1Ber\\OneDrive\\Documents\\uni-files\\Intro to AI\\Assignment 1\\Search\\Search.csproj": {}
+    "C:\\Users\\H1Ber\\OneDrive\\Documents\\uni-files\\Intro to AI\\Assignment 1\\GraphSearchVisualiser\\Search.csproj": {}
   },
   "projects": {
-    "C:\\Users\\H1Ber\\OneDrive\\Documents\\uni-files\\Intro to AI\\Assignment 1\\Search\\Search.csproj": {
+    "C:\\Users\\H1Ber\\OneDrive\\Documents\\uni-files\\Intro to AI\\Assignment 1\\GraphSearchVisualiser\\Search.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\H1Ber\\OneDrive\\Documents\\uni-files\\Intro to AI\\Assignment 1\\Search\\Search.csproj",
+        "projectUniqueName": "C:\\Users\\H1Ber\\OneDrive\\Documents\\uni-files\\Intro to AI\\Assignment 1\\GraphSearchVisualiser\\Search.csproj",
         "projectName": "Search",
-        "projectPath": "C:\\Users\\H1Ber\\OneDrive\\Documents\\uni-files\\Intro to AI\\Assignment 1\\Search\\Search.csproj",
+        "projectPath": "C:\\Users\\H1Ber\\OneDrive\\Documents\\uni-files\\Intro to AI\\Assignment 1\\GraphSearchVisualiser\\Search.csproj",
         "packagesPath": "C:\\Users\\H1Ber\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\H1Ber\\OneDrive\\Documents\\uni-files\\Intro to AI\\Assignment 1\\Search\\obj\\",
+        "outputPath": "C:\\Users\\H1Ber\\OneDrive\\Documents\\uni-files\\Intro to AI\\Assignment 1\\GraphSearchVisualiser\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Microsoft\\Xamarin\\NuGet\\",
