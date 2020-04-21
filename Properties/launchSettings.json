@@ -2,7 +2,7 @@
   "profiles": {
     "Search": {
       "commandName": "Project",
-      "commandLineArgs": "\"RobotNav.txt\" \"MDS\"",
+      "commandLineArgs": "\"RobotNav.txt\" \"GUI\"",
       "workingDirectory": "$(SolutionDir)"
     }
   }
