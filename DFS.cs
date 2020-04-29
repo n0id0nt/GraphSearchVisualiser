@@ -71,7 +71,6 @@ namespace Search
             {
                 focus = focus.Parent;
             }
-            return;
         }
 
         public override void Draw(int cellSize, RenderWindow window)

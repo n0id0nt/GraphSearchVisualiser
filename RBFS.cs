@@ -8,9 +8,17 @@ namespace Search
 {
     class RBFS : InformedSearch
     {
+        private Node focus;
+
+        private bool finished;
+
+        Dictionary<Node, int> score;
+
         public RBFS(Node startingNode, Enviroment enviroment) : base(startingNode, enviroment)
         {
-
+            focus = startingNode;
+            finished = false;
+            score = new Dictionary<Node, int>();
         }
 
         public override string RunSearch()
@@ -33,18 +41,10 @@ namespace Search
                 return node;
             }
 
-            List<Node> children = node.Children;
-
-            if (children.Count == 0)
-            {
-                return null;
-            }
-
-
             Dictionary<Node, int> score = new Dictionary<Node, int>();
 
             // give a score to each node
-            foreach (Node child in children)
+            foreach (Node child in node.Children)
             {
                 if (!ContainsNode(CheckedNodes, child))
                 {
@@ -68,12 +68,120 @@ namespace Search
 
         public override void Update()
         {
-            throw new NotImplementedException();
+            // checks if node is at goal
+            if (focus.Cell == CellTypes.GOAL)
+            {
+                finished = true;
+                return;
+            }
+
+            Node bestNode = null;
+            int bestScore = -1;
+
+            foreach (Node child in focus.Children)
+            {
+                if (!ContainsNode(CheckedNodes, child))
+                {
+                    int score = MovePortential(child.X, child.Y) + NodeCost(child);
+                    if (score < bestScore || bestScore == -1)
+                    {
+                        bestNode = child;
+                        bestScore = score;
+                    }
+                }
+            }
+
+            // select focus
+            if (bestNode is Node)
+            {
+                focus = bestNode;
+                CheckedNodes.Add(bestNode);
+                return;
+            }
+
+            // has no children set focus to parent
+            if (focus.Parent is Node)
+            {
+                focus = focus.Parent;
+            }
         }
 
         public override void Draw(int cellSize, RenderWindow window)
         {
-            throw new NotImplementedException();
+            foreach (Node node in CheckedNodes)
+            {
+                CircleShape circleChecked = new CircleShape(cellSize / 4);
+                circleChecked.Origin = new SFML.System.Vector2f(cellSize / 4, cellSize / 4);
+                circleChecked.FillColor = new Color(156, 18, 0);
+                circleChecked.Position = new SFML.System.Vector2f(node.X * cellSize + cellSize / 2, node.Y * cellSize + cellSize / 2);
+                window.Draw(circleChecked);
+                //SwinGame.FillCircle(Color.DarkRed, node.X * cellSize + cellSize / 2, node.Y * cellSize + cellSize / 2, cellSize / 4);
+                if (node.Parent is Node)
+                {
+                    VertexArray line = new VertexArray(PrimitiveType.LineStrip, 2);
+
+                    Vertex vertex0 = new Vertex();
+                    vertex0.Position = new SFML.System.Vector2f(node.X * cellSize + cellSize / 2, node.Y * cellSize + cellSize / 2);
+                    vertex0.Color = Color.Black;
+                    line[0] = vertex0;
+
+                    Vertex vertex1 = new Vertex();
+                    vertex1.Position = new SFML.System.Vector2f(node.Parent.X * cellSize + cellSize / 2, node.Parent.Y * cellSize + cellSize / 2);
+                    vertex1.Color = Color.Black;
+                    line[1] = vertex1;
+
+                    window.Draw(line);
+                    //SwinGame.DrawLine(Color.Black,
+                    //    node.X * cellSize + cellSize / 2, node.Y * cellSize + cellSize / 2,
+                    //     node.Parent.X * cellSize + cellSize / 2, node.Parent.Y * cellSize + cellSize / 2);
+
+                }
+            }
+            if (finished)
+            {
+                CircleShape circle = new CircleShape(cellSize / 3);
+                circle.Origin = new SFML.System.Vector2f(cellSize / 3, cellSize / 3);
+                circle.FillColor = new Color(0, 189, 32);
+                circle.Position = new SFML.System.Vector2f(focus.X * cellSize + cellSize / 2, focus.Y * cellSize + cellSize / 2);
+                window.Draw(circle);
+                //SwinGame.FillCircle(Color.LightGreen, focus.X * cellSize + cellSize / 2, focus.Y * cellSize + cellSize / 2, cellSize / 3);
+                Node p = focus;
+                while (p is Node)
+                {
+                    RectangleShape rect = new RectangleShape();
+                    rect.FillColor = new Color(1, 112, 20);
+                    switch (p.Dir)
+                    {
+                        case Directions.UP:
+                            rect.Size = new SFML.System.Vector2f(14, cellSize + 14);
+                            rect.Position = new SFML.System.Vector2f(p.X * cellSize + cellSize / 2 - 7, p.Y * cellSize + cellSize / 2 - 7);
+                            break;
+                        case Directions.DOWN:
+                            rect.Size = new SFML.System.Vector2f(14, cellSize + 14);
+                            rect.Position = new SFML.System.Vector2f(p.X * cellSize + cellSize / 2 - 7, p.Y * cellSize - cellSize / 2 - 7);
+                            break;
+                        case Directions.LEFT:
+                            rect.Size = new SFML.System.Vector2f(cellSize + 14, 14);
+                            rect.Position = new SFML.System.Vector2f(p.X * cellSize + cellSize / 2 - 7, p.Y * cellSize + cellSize / 2 - 7);
+                            break;
+                        case Directions.RIGHT:
+                            rect.Size = new SFML.System.Vector2f(cellSize + 14, 15);
+                            rect.Position = new SFML.System.Vector2f(p.X * cellSize - cellSize / 2 - 7, p.Y * cellSize + cellSize / 2 - 7);
+                            break;
+                    }
+                    window.Draw(rect);
+                    p = p.Parent;
+                }
+            }
+            else
+            {
+                CircleShape circleFronteir = new CircleShape(cellSize / 3);
+                circleFronteir.Origin = new SFML.System.Vector2f(cellSize / 3, cellSize / 3);
+                circleFronteir.FillColor = new Color(199, 135, 6);
+                circleFronteir.Position = new SFML.System.Vector2f(focus.X * cellSize + cellSize / 2, focus.Y * cellSize + cellSize / 2);
+                window.Draw(circleFronteir);
+                //winGame.FillCircle(Color.DarkOrange, focus.X * cellSize + cellSize / 2, focus.Y * cellSize + cellSize / 2, cellSize / 3);
+            }
         }
     }
 }
