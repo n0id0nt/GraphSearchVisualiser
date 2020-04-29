@@ -12,7 +12,8 @@ namespace Search
             "BFS",
             "GBFS",
             "AS",
-            "MDS"
+            "IDDFS",
+            "RBFS"
         };
 
         static private int BUTTON_HEIGHT = 25;

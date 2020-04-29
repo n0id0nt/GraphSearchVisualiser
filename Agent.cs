@@ -31,11 +31,12 @@ namespace Search
                 case "AS":
                     searchMethod = new AS(this, enviroment);
                     break;
-                case "MDS":
-                    searchMethod = new MDS(this, enviroment);
+                case "IDDFS":
+                    searchMethod = new IDDFS(this);
                     break;
-                case "CUS2":
-                    return false;
+                case "RBFS":
+                    searchMethod = new RBFS(this, enviroment);
+                    break;
                 default:
                     return false;
             }

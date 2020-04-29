@@ -44,6 +44,19 @@ namespace Search
             return score;
         }
 
+        protected int NodeCost(Node node)
+        {
+            // each move has a uniform cost of one
+            int cost = 0;
+            Node p = node.Parent;
+            while (p is Node)
+            {
+                cost += 1;
+                p = p.Parent;
+            }
+            return cost;
+        }
+
         public override abstract string RunSearch();
 
         public override abstract void Update();

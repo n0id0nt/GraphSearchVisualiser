@@ -8,21 +8,19 @@ namespace Search
 {
     class DFS : Search
     {
-        private Node startingNode;
         private Node focus;
 
         private bool finished;
 
         public DFS(Node startingNode) : base(startingNode)
         {
-            this.startingNode = startingNode;
             focus = startingNode;
             finished = false;
         }
 
         public override string RunSearch()
         {
-            return RecursiveSearch(startingNode);
+            return RecursiveSearch(StartingNode);
         }
 
         private string RecursiveSearch(Node node)

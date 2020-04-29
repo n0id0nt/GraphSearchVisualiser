@@ -32,7 +32,10 @@ namespace Search
                     enviroment.Agent.setSearch("AS");
                     break;
                 case 4:
-                    enviroment.Agent.setSearch("MDS");
+                    enviroment.Agent.setSearch("IDDFS");
+                    break;
+                case 5:
+                    enviroment.Agent.setSearch("RBFS");
                     break;
                 default:
                     break;
