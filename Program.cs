@@ -7,8 +7,8 @@ namespace Search
 {
     class Program
     {
-
-        public const int FRAMERATE = 100;
+        static public byte FRAMERATE = 10;
+        static public bool PAUSED = false;
         public const int CELL_SIZE = 70;
         public const int MENU_WIDTH = 140;
 
@@ -42,6 +42,30 @@ namespace Search
             }
         }
 
+        static void OnKeyRealeased(object sender, KeyEventArgs e)
+        {
+            RenderWindow window = (RenderWindow)sender;
+            if (e.Code == Keyboard.Key.RBracket)
+            {
+                FRAMERATE += 2;
+                if (FRAMERATE > 200)
+                    FRAMERATE = 200;
+
+                window.SetFramerateLimit(FRAMERATE);
+            }
+            else if (e.Code == Keyboard.Key.LBracket)
+            {
+                FRAMERATE -= 2;
+                if (FRAMERATE < 2)
+                    FRAMERATE = 2;
+                window.SetFramerateLimit(FRAMERATE);
+            }
+            else if (e.Code == Keyboard.Key.P)
+            {
+                PAUSED = !PAUSED;
+            }
+        }
+
         static void Main(string[] args)
         {
             string file = args[0];
@@ -51,12 +75,11 @@ namespace Search
 
             if (method == "GUI")
             {
-                
-
                 RenderWindow window = new RenderWindow(new VideoMode((uint)(enviroment.Width * CELL_SIZE) + MENU_WIDTH, (uint)(enviroment.Height * CELL_SIZE)), "Robot Navigation", Styles.Close);
 
                 window.Closed += (s, a) => window.Close();
                 window.MouseButtonReleased += new EventHandler<MouseButtonEventArgs>(OnClick);
+                window.KeyReleased += new EventHandler<KeyEventArgs>(OnKeyRealeased);
 
                 window.SetFramerateLimit(FRAMERATE);
 
@@ -68,7 +91,8 @@ namespace Search
                 {
                     window.DispatchEvents();
                     
-                    enviroment.Agent.Update();
+                    if (!PAUSED)
+                        enviroment.Agent.Update();
 
                     window.Clear(Color.Black);
 

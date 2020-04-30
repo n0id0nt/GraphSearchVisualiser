@@ -24,9 +24,6 @@ namespace Search
         private int curDepth;
         private int iterDepth;
 
-        private int curSelection;
-        private List<int> selectionList;
-
         private bool finished;
 
         private List<Node> iterationCheckedNodes;
@@ -37,9 +34,6 @@ namespace Search
             finished = false;
             curDepth = 0;
             iterDepth = 0;
-            curSelection = 0;
-            selectionList = new List<int>();
-            selectionList.Add(0);
         }
 
         public override string RunSearch()
@@ -113,15 +107,11 @@ namespace Search
                 {
                     if (focus.Parent is Node)
                     {
-                        selectionList.RemoveAt(0);
-                        selectionList[0]++;
                         focus = focus.Parent;
                         iterDepth++;
                     }
                     else
                     {
-                        selectionList = new List<int>();
-                        selectionList.Add(0);
                         focus = StartingNode;
                         curDepth++;
                         iterDepth = curDepth;
@@ -133,29 +123,25 @@ namespace Search
                 return;
             }
 
-            List<Node> children = focus.Children;
-
-            if (children.Count > selectionList[0])
+            foreach (Node child in focus.Children)
             {
-                iterationCheckedNodes.Add(children[selectionList[0]]);                
-                focus = children[selectionList[0]];
-                selectionList.Insert(0, 0);
-                iterDepth--;
-                return;
+                if (!ContainsNode(iterationCheckedNodes, child))
+                {
+                    iterationCheckedNodes.Add(child);
+                    focus = child;
+                    iterDepth--;
+                    return;
+                }
             }
 
             // has no children 
             if (focus.Parent is Node)
             {
-                selectionList.RemoveAt(0);
-                selectionList[0]++;
                 focus = focus.Parent;
                 iterDepth++;
             }
             else
             {
-                selectionList = new List<int>();
-                selectionList.Add(0);
                 focus = StartingNode;
                 curDepth++;
                 iterDepth = curDepth;
