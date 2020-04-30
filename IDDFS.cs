@@ -24,6 +24,9 @@ namespace Search
         private int curDepth;
         private int iterDepth;
 
+        private int curSelection;
+        private List<int> selectionList;
+
         private bool finished;
 
         private List<Node> iterationCheckedNodes;
@@ -34,6 +37,9 @@ namespace Search
             finished = false;
             curDepth = 0;
             iterDepth = 0;
+            curSelection = 0;
+            selectionList = new List<int>();
+            selectionList.Add(0);
         }
 
         public override string RunSearch()
@@ -82,12 +88,6 @@ namespace Search
             {
                 CheckedNodes.Add(child);
 
-                if (ContainsNode(iterationCheckedNodes, child))
-                {
-                    continue; // skip itteration of the loop since already look
-                }
-                iterationCheckedNodes.Add(child);
-
                 SearchResult result = RecursiveSearch(child, depth - 1);
                 if (result.Goal is Node)
                 {
@@ -108,35 +108,38 @@ namespace Search
                 if (focus.Cell == CellTypes.GOAL)
                 {
                     finished = true;
-                    return;
                 }
                 else
                 {
                     if (focus.Parent is Node)
                     {
+                        selectionList.RemoveAt(0);
+                        selectionList[0]++;
                         focus = focus.Parent;
                         iterDepth++;
                     }
                     else
                     {
+                        selectionList = new List<int>();
+                        selectionList.Add(0);
                         focus = StartingNode;
                         curDepth++;
                         iterDepth = curDepth;
                         iterationCheckedNodes = new List<Node>();
                         iterationCheckedNodes.Add(StartingNode);
-                        return;
                     }
+                    
                 }
+                return;
             }
 
-            foreach (Node child in focus.Children)
+            List<Node> children = focus.Children;
+
+            if (children.Count > selectionList[0])
             {
-                if (ContainsNode(iterationCheckedNodes, child))
-                {
-                    continue; // skip itteration of the loop since already look
-                }
-                iterationCheckedNodes.Add(child);
-                focus = child;
+                iterationCheckedNodes.Add(children[selectionList[0]]);                
+                focus = children[selectionList[0]];
+                selectionList.Insert(0, 0);
                 iterDepth--;
                 return;
             }
@@ -144,17 +147,20 @@ namespace Search
             // has no children 
             if (focus.Parent is Node)
             {
+                selectionList.RemoveAt(0);
+                selectionList[0]++;
                 focus = focus.Parent;
                 iterDepth++;
             }
             else
             {
+                selectionList = new List<int>();
+                selectionList.Add(0);
                 focus = StartingNode;
                 curDepth++;
                 iterDepth = curDepth;
                 iterationCheckedNodes = new List<Node>();
                 iterationCheckedNodes.Add(StartingNode);
-                return;
             }
         }
 

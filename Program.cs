@@ -8,7 +8,7 @@ namespace Search
     class Program
     {
 
-        public const int FRAMERATE = 5;
+        public const int FRAMERATE = 100;
         public const int CELL_SIZE = 70;
         public const int MENU_WIDTH = 140;
 

@@ -10,15 +10,15 @@ namespace Search
     {
         private Node focus;
 
-        private bool finished;
+        private List<Node> fronteir; 
 
-        Dictionary<Node, int> score;
+        private bool finished;
 
         public RBFS(Node startingNode, Enviroment enviroment) : base(startingNode, enviroment)
         {
             focus = startingNode;
             finished = false;
-            score = new Dictionary<Node, int>();
+            fronteir = new List<Node>();
         }
 
         public override string RunSearch()
@@ -80,14 +80,16 @@ namespace Search
 
             foreach (Node child in focus.Children)
             {
-                if (!ContainsNode(CheckedNodes, child))
+                if (!ContainsNode(CheckedNodes, child) && !ContainsNode(fronteir, child))
                 {
                     int score = MovePortential(child.X, child.Y) + NodeCost(child);
                     if (score < bestScore || bestScore == -1)
                     {
                         bestNode = child;
                         bestScore = score;
+                        
                     }
+                    fronteir.Add(child);
                 }
             }
 
@@ -96,6 +98,7 @@ namespace Search
             {
                 focus = bestNode;
                 CheckedNodes.Add(bestNode);
+                fronteir.Remove(bestNode);
                 return;
             }
 
@@ -103,6 +106,12 @@ namespace Search
             if (focus.Parent is Node)
             {
                 focus = focus.Parent;
+
+                // remove chilren from fronteir
+                foreach (Node child in focus.Children)
+                {
+                    fronteir.RemoveAll(n => child.EqualsPos(n));
+                }
             }
         }
 
@@ -137,6 +146,7 @@ namespace Search
 
                 }
             }
+
             if (finished)
             {
                 CircleShape circle = new CircleShape(cellSize / 3);
