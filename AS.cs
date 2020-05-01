@@ -7,7 +7,7 @@ namespace Search
 {
     class AS : InformedSearch
     {
-        private List<Node> fronteir;
+        private List<Node> frontier;
         private Node focus;
 
         private bool finished;
@@ -22,8 +22,8 @@ namespace Search
 
         public AS(Node startingNode, Enviroment enviroment) : base(startingNode, enviroment)
         {
-            fronteir = new List<Node>();
-            fronteir.Add(startingNode);
+            frontier = new List<Node>();
+            frontier.Add(startingNode);
             focus = startingNode;
             finished = false;
             state = States.CHECKING;
@@ -31,21 +31,21 @@ namespace Search
 
         public override string RunSearch()
         {
-            List<Node> fronteir = new List<Node>();
-            fronteir.Add(StartingNode);
-            while (fronteir.Count != 0)
+            List<Node> frontier = new List<Node>();
+            frontier.Add(StartingNode);
+            while (frontier.Count != 0)
             {
 
-                Node selection = fronteir[0];
-                int minScore = MovePortential(fronteir[0].X, fronteir[0].Y) + NodeCost(fronteir[0]);
+                Node selection = frontier[0];
+                int minScore = MovePortential(frontier[0].X, frontier[0].Y) + NodeCost(frontier[0]);
 
-                for (int i = 1; i < fronteir.Count; i++)
+                for (int i = 1; i < frontier.Count; i++)
                 {
-                    int curScore = MovePortential(fronteir[i].X, fronteir[i].Y) + NodeCost(fronteir[i]);
+                    int curScore = MovePortential(frontier[i].X, frontier[i].Y) + NodeCost(frontier[i]);
                     if (curScore < minScore)
                     {
                         minScore = curScore;
-                        selection = fronteir[i];
+                        selection = frontier[i];
                     }
                 }
 
@@ -56,14 +56,14 @@ namespace Search
                 }
                 // gets the children of the current node
                 List<Node> children = selection.Children;
-                // removes the node from the fronteir
-                fronteir.Remove(selection);
+                // removes the node from the frontier
+                frontier.Remove(selection);
                 foreach (Node child in children)
                 {
                     if (!ContainsNode(CheckedNodes, child))
                     {
                         CheckedNodes.Add(child);
-                        fronteir.Add(child);
+                        frontier.Add(child);
                     }
                 }
             }
@@ -74,7 +74,7 @@ namespace Search
         {
             if (state == States.CHECKING)
             {
-                if (fronteir.Count == 0)
+                if (frontier.Count == 0)
                 {
                     return;
                 }
@@ -85,20 +85,20 @@ namespace Search
                     return;
                 }
                 // select node to focus on
-                focus = fronteir[0];
-                int minScore = MovePortential(fronteir[0].X, fronteir[0].Y) + NodeCost(fronteir[0]);
+                focus = frontier[0];
+                int minScore = MovePortential(frontier[0].X, frontier[0].Y) + NodeCost(frontier[0]);
 
-                for (int i = 1; i < fronteir.Count; i++)
+                for (int i = 1; i < frontier.Count; i++)
                 {
-                    int curScore = MovePortential(fronteir[i].X, fronteir[i].Y) + NodeCost(fronteir[i]);
+                    int curScore = MovePortential(frontier[i].X, frontier[i].Y) + NodeCost(frontier[i]);
                     if (curScore < minScore)
                     {
                         minScore = curScore;
-                        focus = fronteir[i];
+                        focus = frontier[i];
                     }
                 }
-                // removes the node from the fronteir
-                fronteir.Remove(focus);
+                // removes the node from the frontier
+                frontier.Remove(focus);
                 // checks new position is at the goal before expending the node
                 if (focus.Cell == CellTypes.GOAL)
                 {
@@ -119,7 +119,7 @@ namespace Search
                     if (!ContainsNode(CheckedNodes, child))
                     {
                         CheckedNodes.Add(child);
-                        fronteir.Add(child);
+                        frontier.Add(child);
                     }
                 }
 
@@ -154,13 +154,13 @@ namespace Search
                 }
             }
 
-            foreach (Node node in fronteir)
+            foreach (Node node in frontier)
             {
-                CircleShape circleFronteir = new CircleShape(cellSize / 3);
-                circleFronteir.Origin = new SFML.System.Vector2f(cellSize / 3, cellSize / 3);
-                circleFronteir.FillColor = new Color(199, 135, 6);
-                circleFronteir.Position = new SFML.System.Vector2f(node.X * cellSize + cellSize / 2, node.Y * cellSize + cellSize / 2);
-                window.Draw(circleFronteir);
+                CircleShape circlefrontier = new CircleShape(cellSize / 3);
+                circlefrontier.Origin = new SFML.System.Vector2f(cellSize / 3, cellSize / 3);
+                circlefrontier.FillColor = new Color(199, 135, 6);
+                circlefrontier.Position = new SFML.System.Vector2f(node.X * cellSize + cellSize / 2, node.Y * cellSize + cellSize / 2);
+                window.Draw(circlefrontier);
             }
 
             CircleShape circle = new CircleShape(cellSize / 3);

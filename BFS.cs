@@ -8,7 +8,7 @@ namespace Search
 {
     class BFS : Search
     {
-        private List<Node> fronteir;
+        private List<Node> frontier;
         private Node focus;
 
         private bool finished;
@@ -23,8 +23,8 @@ namespace Search
 
         public BFS(Node startingNode) : base(startingNode)
         {
-            fronteir = new List<Node>();
-            fronteir.Add(startingNode);
+            frontier = new List<Node>();
+            frontier.Add(startingNode);
             focus = startingNode;
             finished = false;
             state = States.CHECKING;
@@ -32,25 +32,25 @@ namespace Search
 
         public override string RunSearch()
         {
-            List<Node> fronteir = new List<Node>();
-            fronteir.Add(StartingNode);
-            while (fronteir.Count != 0)
+            List<Node> frontier = new List<Node>();
+            frontier.Add(StartingNode);
+            while (frontier.Count != 0)
             {
                 // checks if node is at the goal
-                if (fronteir[0].Cell == CellTypes.GOAL)
+                if (frontier[0].Cell == CellTypes.GOAL)
                 {
-                    return fronteir[0].Path + " - GOAL!";
+                    return frontier[0].Path + " - GOAL!";
                 }
                 // gets the children of the current node
-                List<Node> children = fronteir[0].Children;
-                // removes the node from the fronteir
-                fronteir.RemoveAt(0);
+                List<Node> children = frontier[0].Children;
+                // removes the node from the frontier
+                frontier.RemoveAt(0);
                 foreach (Node child in children)
                 {
                     if (!ContainsNode(CheckedNodes, child))
                     {
                         CheckedNodes.Add(child);
-                        fronteir.Add(child);
+                        frontier.Add(child);
                     }
                 }
             }
@@ -61,7 +61,7 @@ namespace Search
         {
             if (state == States.CHECKING)
             {
-                if (fronteir.Count == 0)
+                if (frontier.Count == 0)
                 {
                     return;
                 }
@@ -71,10 +71,10 @@ namespace Search
                     finished = true;
                     return;
                 }
-                // set the focus to the start of the fronteir
-                focus = fronteir[0];
-                // removes the node from the fronteir
-                fronteir.RemoveAt(0);
+                // set the focus to the start of the frontier
+                focus = frontier[0];
+                // removes the node from the frontier
+                frontier.RemoveAt(0);
                 // checks new position is at the goal before expending the node
                 if (focus.Cell == CellTypes.GOAL)
                 {
@@ -95,7 +95,7 @@ namespace Search
                     if (!ContainsNode(CheckedNodes, child))
                     {
                         CheckedNodes.Add(child);
-                        fronteir.Add(child);
+                        frontier.Add(child);
                     }
                 }
                 state = States.CHECKING;
@@ -129,13 +129,13 @@ namespace Search
                 }
             }
 
-            foreach (Node node in fronteir)
+            foreach (Node node in frontier)
             {
-                CircleShape circleFronteir = new CircleShape(cellSize / 3);
-                circleFronteir.Origin = new SFML.System.Vector2f(cellSize / 3, cellSize / 3);
-                circleFronteir.FillColor = new Color(199, 135, 6);
-                circleFronteir.Position = new SFML.System.Vector2f(node.X * cellSize + cellSize / 2, node.Y * cellSize + cellSize / 2);
-                window.Draw(circleFronteir);
+                CircleShape circlefrontier = new CircleShape(cellSize / 3);
+                circlefrontier.Origin = new SFML.System.Vector2f(cellSize / 3, cellSize / 3);
+                circlefrontier.FillColor = new Color(199, 135, 6);
+                circlefrontier.Position = new SFML.System.Vector2f(node.X * cellSize + cellSize / 2, node.Y * cellSize + cellSize / 2);
+                window.Draw(circlefrontier);
             }
 
             CircleShape circle = new CircleShape(cellSize / 3);

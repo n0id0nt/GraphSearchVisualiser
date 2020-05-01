@@ -142,11 +142,11 @@ namespace Search
             }
             else
             {
-                CircleShape circleFronteir = new CircleShape(cellSize / 3);
-                circleFronteir.Origin = new SFML.System.Vector2f(cellSize / 3, cellSize / 3);
-                circleFronteir.FillColor = new Color(199, 135, 6);
-                circleFronteir.Position = new SFML.System.Vector2f(focus.X * cellSize + cellSize / 2, focus.Y * cellSize + cellSize / 2);
-                window.Draw(circleFronteir);
+                CircleShape circlefrontier = new CircleShape(cellSize / 3);
+                circlefrontier.Origin = new SFML.System.Vector2f(cellSize / 3, cellSize / 3);
+                circlefrontier.FillColor = new Color(199, 135, 6);
+                circlefrontier.Position = new SFML.System.Vector2f(focus.X * cellSize + cellSize / 2, focus.Y * cellSize + cellSize / 2);
+                window.Draw(circlefrontier);
                 //winGame.FillCircle(Color.DarkOrange, focus.X * cellSize + cellSize / 2, focus.Y * cellSize + cellSize / 2, cellSize / 3);
             }
         }

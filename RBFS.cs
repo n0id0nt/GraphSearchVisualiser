@@ -10,7 +10,7 @@ namespace Search
     {
         private Node focus;
 
-        private List<Node> fronteir; 
+        private List<Node> frontier; 
 
         private bool finished;
 
@@ -18,7 +18,7 @@ namespace Search
         {
             focus = startingNode;
             finished = false;
-            fronteir = new List<Node>();
+            frontier = new List<Node>();
         }
 
         public override string RunSearch()
@@ -49,7 +49,7 @@ namespace Search
                 if (!ContainsNode(CheckedNodes, child))
                 {
                     CheckedNodes.Add(child);
-                    score.Add(child, MovePortential(child.X, child.Y) + NodeCost(child));
+                    score.Add(child, MovePortential(child.X, child.Y));
                 }
             }
 
@@ -80,16 +80,16 @@ namespace Search
 
             foreach (Node child in focus.Children)
             {
-                if (!ContainsNode(CheckedNodes, child) && !ContainsNode(fronteir, child))
+                if (!ContainsNode(CheckedNodes, child) && !ContainsNode(frontier, child))
                 {
-                    int score = MovePortential(child.X, child.Y) + NodeCost(child);
+                    int score = MovePortential(child.X, child.Y);
                     if (score < bestScore || bestScore == -1)
                     {
                         bestNode = child;
                         bestScore = score;
                         
                     }
-                    fronteir.Add(child);
+                    frontier.Add(child);
                 }
             }
 
@@ -98,7 +98,7 @@ namespace Search
             {
                 focus = bestNode;
                 CheckedNodes.Add(bestNode);
-                fronteir.Remove(bestNode);
+                frontier.Remove(bestNode);
                 return;
             }
 
@@ -107,10 +107,10 @@ namespace Search
             {
                 focus = focus.Parent;
 
-                // remove chilren from fronteir
+                // remove chilren from frontier
                 foreach (Node child in focus.Children)
                 {
-                    fronteir.RemoveAll(n => child.EqualsPos(n));
+                    frontier.RemoveAll(n => child.EqualsPos(n));
                 }
             }
         }
@@ -185,11 +185,11 @@ namespace Search
             }
             else
             {
-                CircleShape circleFronteir = new CircleShape(cellSize / 3);
-                circleFronteir.Origin = new SFML.System.Vector2f(cellSize / 3, cellSize / 3);
-                circleFronteir.FillColor = new Color(199, 135, 6);
-                circleFronteir.Position = new SFML.System.Vector2f(focus.X * cellSize + cellSize / 2, focus.Y * cellSize + cellSize / 2);
-                window.Draw(circleFronteir);
+                CircleShape circlefrontier = new CircleShape(cellSize / 3);
+                circlefrontier.Origin = new SFML.System.Vector2f(cellSize / 3, cellSize / 3);
+                circlefrontier.FillColor = new Color(199, 135, 6);
+                circlefrontier.Position = new SFML.System.Vector2f(focus.X * cellSize + cellSize / 2, focus.Y * cellSize + cellSize / 2);
+                window.Draw(circlefrontier);
                 //winGame.FillCircle(Color.DarkOrange, focus.X * cellSize + cellSize / 2, focus.Y * cellSize + cellSize / 2, cellSize / 3);
             }
         }
