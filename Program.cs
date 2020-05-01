@@ -9,7 +9,7 @@ namespace Search
     {
         static public byte FRAMERATE = 10;
         static public bool PAUSED = false;
-        public const int CELL_SIZE = 70;
+        public const int CELL_SIZE = 30;
         public const int MENU_WIDTH = 140;
 
         static Enviroment enviroment;
@@ -71,7 +71,15 @@ namespace Search
             string file = args[0];
             string method = args[1];
 
-            enviroment = new Enviroment(file);
+            try
+            {
+                enviroment = new Enviroment(file);
+            }
+            catch
+            {
+                Console.WriteLine("The file provided is not valid");
+                return;
+            }
 
             if (method == "GUI")
             {
