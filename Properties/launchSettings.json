@@ -2,7 +2,7 @@
   "profiles": {
     "Search": {
       "commandName": "Project",
-      "commandLineArgs": "\"EnviromentGrids/RobotNav11.txt\" \"IDDFS\"",
+      "commandLineArgs": "\"EnviromentGrids/RobotNav8.txt\" \"GUI\"",
       "workingDirectory": "$(SolutionDir)"
     }
   }

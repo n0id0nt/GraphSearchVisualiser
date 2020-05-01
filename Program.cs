@@ -11,7 +11,7 @@ namespace Search
         const byte MAXFRAMERATE = 250;
         const byte MINFRAMERATE = 2;
         static bool PAUSED = false;
-        const int CELL_SIZE = 50;
+        const int CELL_SIZE = 70;
         const int MENU_WIDTH = 140;
 
         static Enviroment enviroment;

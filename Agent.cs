@@ -57,7 +57,7 @@ namespace Search
         {
             if (setSearch(method))
             {
-                string result = string.Format("{2}, nodes checked = {1},\n{0}", searchMethod.RunSearch(), searchMethod.CheckedNodes.Count, method);
+                string result = string.Format("{2}, nodes checked = {1},\n{0}", searchMethod.RunSearch(), searchMethod.Count, method);
 
                 searchMethod.CheckedNodes = new List<Node>(); // reset the list of nodes
 

@@ -17,6 +17,8 @@ namespace Search
 
         private List<Node> iterationCheckedNodes;
 
+        public override ulong Count { get; protected set; }
+
         /// <summary>
         /// Denotes the result of each iteration of the search
         /// </summary>
@@ -41,6 +43,7 @@ namespace Search
             maxDepthReached = false;
             curDepth = 0;
             iterDepth = 0;
+            Count = 0;
         }
 
         public override string RunSearch()
@@ -87,8 +90,6 @@ namespace Search
             bool remaining = false;
             foreach (Node child in node.Children)
             {
-                CheckedNodes.Add(child);
-
                 // checks node is not in the current path
                 Node parent = node;
                 bool inCurPath = false;
@@ -104,6 +105,7 @@ namespace Search
                 if (inCurPath) 
                     continue;
 
+                Count++;
                 SearchResult result = RecursiveSearch(child, depth - 1);
                 if (result.Goal is Node)
                 {

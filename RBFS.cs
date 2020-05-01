@@ -8,22 +8,52 @@ namespace Search
 {
     class RBFS : InformedSearch
     {
-        private Node focus;
+        private List<SearchResult> focus;
+        private List<int> limit;
 
-        private List<Node> frontier; 
+        private int returnValue;
+
+        private int state; // the state of the update function -1 moving into 0 looping through 1 moving out
 
         private bool finished;
 
+        private List<List<SearchResult>> score;
+
+        public override ulong Count { get; protected set; }
+
+        /// <summary>
+        /// Denotes the result of each iteration of the search
+        /// </summary>
+        class SearchResult
+        {
+            public SearchResult(Node result, int remaining)
+            {
+                Result = result;
+                CostLimit = remaining;
+            }
+
+            // the node that reaches the goal
+            public Node Result { get; }
+            // if there is still more to search
+            public int CostLimit { get; set; }
+        }
+
         public RBFS(Node startingNode, Enviroment enviroment) : base(startingNode, enviroment)
         {
-            focus = startingNode;
+            focus = new List<SearchResult>();
+            focus.Add(new SearchResult(StartingNode, int.MaxValue));
+            limit = new List<int>();
+            limit.Add(int.MaxValue);
             finished = false;
-            frontier = new List<Node>();
+            state = -1;
+            score = new List<List<SearchResult>>();
+            Count = 0;
         }
 
         public override string RunSearch()
         {
-            Node result = RecursiveSearch(StartingNode);
+            int score = int.MaxValue;
+            Node result = RecursiveSearch(new SearchResult(StartingNode, score), score).Result;
 
             if (result is Node)
             {
@@ -33,85 +63,123 @@ namespace Search
             return "No solution found";
         }
 
-        private Node RecursiveSearch(Node node)
+        private SearchResult RecursiveSearch(SearchResult node, int limit)
         {
             // checks if node is at goal
-            if (node.Cell == CellTypes.GOAL)
+            if (node.Result.Cell == CellTypes.GOAL)
             {
                 return node;
             }
 
-            Dictionary<Node, int> score = new Dictionary<Node, int>();
+            
+            List<SearchResult> score = new List<SearchResult>();
 
             // give a score to each node
-            foreach (Node child in node.Children)
+            foreach (Node child in node.Result.Children)
             {
-                if (!ContainsNode(CheckedNodes, child))
+                // checks node is not in the current path
+                Node parent = node.Result;
+                bool inCurPath = false;
+                while (parent.Parent is Node)
                 {
-                    CheckedNodes.Add(child);
-                    score.Add(child, MovePortential(child.X, child.Y));
+                    parent = parent.Parent;
+                    if (parent.EqualsPos(child))
+                    {
+                        inCurPath = true;
+                    }
+                }
+                // jump out of cycle if in current path
+                if (!inCurPath)
+                {
+                    score.Add(new SearchResult(child, MovePortential(child.X, child.Y) + NodeCost(child)));
+                    Count++;
                 }
             }
 
             while (score.Count != 0)
             {
-                Node best = score.OrderBy(n => n.Value).First().Key;
-                Node result = RecursiveSearch(best);
-                if (result is Node)
+                SearchResult best = score.OrderBy(n => n.CostLimit).First();
+                if (best.CostLimit > limit || best.CostLimit == int.MaxValue)
+                    return new SearchResult(null, best.CostLimit);
+                SearchResult result = RecursiveSearch(best, (score.Count > 1) ? Math.Min(limit, score.OrderBy(n => n.CostLimit).ElementAt(1).CostLimit) : limit);
+                best.CostLimit = result.CostLimit;
+                if (result.Result is Node)
                 {
                     return result;
                 }
-                score.Remove(best);
+                //score.Remove(best);
             }
-            return null;
+            return new SearchResult(null, int.MaxValue);
         }
 
         public override void Update()
         {
-            // checks if node is at goal
-            if (focus.Cell == CellTypes.GOAL)
+            if (state == -1)
             {
-                finished = true;
-                return;
-            }
-
-            Node bestNode = null;
-            int bestScore = -1;
-
-            foreach (Node child in focus.Children)
-            {
-                if (!ContainsNode(CheckedNodes, child) && !ContainsNode(frontier, child))
+                // checks if node is at goal
+                if (focus[0].Result.Cell == CellTypes.GOAL)
                 {
-                    int score = MovePortential(child.X, child.Y);
-                    if (score < bestScore || bestScore == -1)
+                    finished = true;
+                    return;
+                }
+
+                state = 0;
+
+                score.Insert(0, new List<SearchResult>());
+
+                foreach (Node child in focus[0].Result.Children)
+                {
+                    if (!ContainsNode(CheckedNodes, child))
                     {
-                        bestNode = child;
-                        bestScore = score;
-                        
+                        CheckedNodes.Add(child);
                     }
-                    frontier.Add(child);
+                    // checks node is not in the current path
+                    Node parent = focus[0].Result;
+                    bool inCurPath = false;
+                    while (parent.Parent is Node)
+                    {
+                        parent = parent.Parent;
+                        if (parent.EqualsPos(child))
+                        {
+                            inCurPath = true;
+                        }
+                    }
+                    if (!inCurPath)
+                        score[0].Add(new SearchResult(child, MovePortential(child.X, child.Y) + NodeCost(child)));
                 }
-            }
 
-            // select focus
-            if (bestNode is Node)
-            {
-                focus = bestNode;
-                CheckedNodes.Add(bestNode);
-                frontier.Remove(bestNode);
+                if (score[0].Count == 0)
+                {
+                    returnValue = int.MaxValue;
+                    state = 1;
+                    score.RemoveAt(0);
+                }
                 return;
             }
 
-            // has no children set focus to parent
-            if (focus.Parent is Node)
+            if (state == 0)
             {
-                focus = focus.Parent;
-
-                // remove chilren from frontier
-                foreach (Node child in focus.Children)
+                SearchResult best = score[0].OrderBy(n => n.CostLimit).First();
+                if (best.CostLimit > limit[0] || best.CostLimit == int.MaxValue)
                 {
-                    frontier.RemoveAll(n => child.EqualsPos(n));
+                    returnValue = best.CostLimit;
+                    state = 1;
+                    score.RemoveAt(0);
+                    return;
                 }
+                // enter into next depth 
+                focus.Insert(0, best);
+                limit.Insert(0, (score[0].Count > 1) ? Math.Min(limit[0], score[0].OrderBy(n => n.CostLimit).ElementAt(1).CostLimit) : limit[0]);
+                state = -1;
+                return;
+            }
+            
+            if (state == 1)
+            {
+                state = 0;
+                focus[0].CostLimit = returnValue;
+                focus.RemoveAt(0);
+                limit.RemoveAt(0);
             }
         }
 
@@ -124,7 +192,6 @@ namespace Search
                 circleChecked.FillColor = new Color(156, 18, 0);
                 circleChecked.Position = new SFML.System.Vector2f(node.X * cellSize + cellSize / 2, node.Y * cellSize + cellSize / 2);
                 window.Draw(circleChecked);
-                //SwinGame.FillCircle(Color.DarkRed, node.X * cellSize + cellSize / 2, node.Y * cellSize + cellSize / 2, cellSize / 4);
                 if (node.Parent is Node)
                 {
                     VertexArray line = new VertexArray(PrimitiveType.LineStrip, 2);
@@ -140,22 +207,17 @@ namespace Search
                     line[1] = vertex1;
 
                     window.Draw(line);
-                    //SwinGame.DrawLine(Color.Black,
-                    //    node.X * cellSize + cellSize / 2, node.Y * cellSize + cellSize / 2,
-                    //     node.Parent.X * cellSize + cellSize / 2, node.Parent.Y * cellSize + cellSize / 2);
-
                 }
             }
 
-            if (finished)
+            //if (finished)
             {
                 CircleShape circle = new CircleShape(cellSize / 3);
                 circle.Origin = new SFML.System.Vector2f(cellSize / 3, cellSize / 3);
                 circle.FillColor = new Color(0, 189, 32);
-                circle.Position = new SFML.System.Vector2f(focus.X * cellSize + cellSize / 2, focus.Y * cellSize + cellSize / 2);
+                circle.Position = new SFML.System.Vector2f(focus[0].Result.X * cellSize + cellSize / 2, focus[0].Result.Y * cellSize + cellSize / 2);
                 window.Draw(circle);
-                //SwinGame.FillCircle(Color.LightGreen, focus.X * cellSize + cellSize / 2, focus.Y * cellSize + cellSize / 2, cellSize / 3);
-                Node p = focus;
+                Node p = focus[0].Result;
                 while (p is Node)
                 {
                     RectangleShape rect = new RectangleShape();
@@ -183,14 +245,13 @@ namespace Search
                     p = p.Parent;
                 }
             }
-            else
+            //else
             {
                 CircleShape circlefrontier = new CircleShape(cellSize / 3);
                 circlefrontier.Origin = new SFML.System.Vector2f(cellSize / 3, cellSize / 3);
                 circlefrontier.FillColor = new Color(199, 135, 6);
-                circlefrontier.Position = new SFML.System.Vector2f(focus.X * cellSize + cellSize / 2, focus.Y * cellSize + cellSize / 2);
+                circlefrontier.Position = new SFML.System.Vector2f(focus[0].Result.X * cellSize + cellSize / 2, focus[0].Result.Y * cellSize + cellSize / 2);
                 window.Draw(circlefrontier);
-                //winGame.FillCircle(Color.DarkOrange, focus.X * cellSize + cellSize / 2, focus.Y * cellSize + cellSize / 2, cellSize / 3);
             }
         }
     }

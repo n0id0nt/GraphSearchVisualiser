@@ -11,6 +11,15 @@ namespace Search
         protected Node StartingNode { get; }
         public List<Node> CheckedNodes { get; set; }
 
+        public virtual ulong Count {
+            get
+            {
+                return (ulong)CheckedNodes.Count;
+            }
+
+            protected set { }
+        }
+        
         protected Search(Node startingNode)
         {
             StartingNode = startingNode;

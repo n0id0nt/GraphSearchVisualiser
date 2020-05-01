@@ -33,6 +33,7 @@ namespace Search
                 Node p = parent;
                 while (p is Node)
                 {
+
                     path = string.Format("{0} -> {1}", p.Name, path);
                     p = p.parent;
                 }
