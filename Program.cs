@@ -7,10 +7,12 @@ namespace Search
 {
     class Program
     {
-        static public byte FRAMERATE = 10;
-        static public bool PAUSED = false;
-        public const int CELL_SIZE = 30;
-        public const int MENU_WIDTH = 140;
+        static byte FRAMERATE = 10;
+        const byte MAXFRAMERATE = 250;
+        const byte MINFRAMERATE = 2;
+        static bool PAUSED = false;
+        const int CELL_SIZE = 50;
+        const int MENU_WIDTH = 140;
 
         static Enviroment enviroment;
 
@@ -48,16 +50,16 @@ namespace Search
             if (e.Code == Keyboard.Key.RBracket)
             {
                 FRAMERATE += 2;
-                if (FRAMERATE > 200)
-                    FRAMERATE = 200;
+                if (FRAMERATE > MAXFRAMERATE)
+                    FRAMERATE = MAXFRAMERATE;
 
                 window.SetFramerateLimit(FRAMERATE);
             }
             else if (e.Code == Keyboard.Key.LBracket)
             {
                 FRAMERATE -= 2;
-                if (FRAMERATE < 2)
-                    FRAMERATE = 2;
+                if (FRAMERATE < MINFRAMERATE)
+                    FRAMERATE = MINFRAMERATE;
                 window.SetFramerateLimit(FRAMERATE);
             }
             else if (e.Code == Keyboard.Key.P)

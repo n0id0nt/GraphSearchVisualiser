@@ -56,11 +56,6 @@ namespace Search
             }
         }
 
-        public void PrintCoordinates()
-        {
-            Console.WriteLine(string.Format("({0},{1})", x, y));
-        }
-
         protected Enviroment enviroment;
 
         public List<Node> Children

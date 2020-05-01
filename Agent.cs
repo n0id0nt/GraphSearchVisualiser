@@ -59,18 +59,6 @@ namespace Search
             }
         }
 
-        private bool ContainsNode(List<Node> nodes, Node node)
-        {
-            foreach (Node a in nodes)
-            {
-                if (node.EqualsPos(a))
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
         public void Update()
         {
             if (searchMethod is Search)

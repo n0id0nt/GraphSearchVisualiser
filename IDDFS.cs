@@ -25,6 +25,7 @@ namespace Search
         private int iterDepth;
 
         private bool finished;
+        private bool maxDepthReached;
 
         private List<Node> iterationCheckedNodes;
 
@@ -32,6 +33,7 @@ namespace Search
         {
             focus = startingNode;
             finished = false;
+            maxDepthReached = false;
             curDepth = 0;
             iterDepth = 0;
         }
@@ -82,6 +84,20 @@ namespace Search
             {
                 CheckedNodes.Add(child);
 
+                // checks node is not in the current path
+                Node parent = node;
+                bool inCurPath = false;
+                while(parent.Parent is Node)
+                {
+                    parent = parent.Parent;
+                    if (parent.EqualsPos(child))
+                    {
+                        inCurPath = true;
+                    }
+                }
+                if (inCurPath)
+                    continue;
+
                 SearchResult result = RecursiveSearch(child, depth - 1);
                 if (result.Goal is Node)
                 {
@@ -99,6 +115,7 @@ namespace Search
         {
             if (iterDepth == 0)
             {
+                maxDepthReached = true;
                 if (focus.Cell == CellTypes.GOAL)
                 {
                     finished = true;
@@ -117,6 +134,7 @@ namespace Search
                         iterDepth = curDepth;
                         iterationCheckedNodes = new List<Node>();
                         iterationCheckedNodes.Add(StartingNode);
+                        maxDepthReached = false;
                     }
                     
                 }
@@ -140,13 +158,14 @@ namespace Search
                 focus = focus.Parent;
                 iterDepth++;
             }
-            else
+            else if (maxDepthReached == true)
             {
                 focus = StartingNode;
                 curDepth++;
                 iterDepth = curDepth;
                 iterationCheckedNodes = new List<Node>();
                 iterationCheckedNodes.Add(StartingNode);
+                maxDepthReached = false;
             }
         }
 
