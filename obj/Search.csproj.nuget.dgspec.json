@@ -45,7 +45,7 @@
           "dependencies": {
             "Microsoft.NETCore.App": {
               "target": "Package",
-              "version": "[2.1.11, )",
+              "version": "[2.1.0, )",
               "autoReferenced": true
             },
             "SFML.Net": {
@@ -58,11 +58,6 @@
           ],
           "assetTargetFallback": true,
           "warn": true
-        }
-      },
-      "runtimes": {
-        "win10-x64": {
-          "#import": []
         }
       }
     }

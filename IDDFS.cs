@@ -5,18 +5,6 @@ using SFML.Graphics;
 
 namespace Search
 {
-    class SearchResult
-    {
-        public SearchResult(Node goal, bool remaining)
-        {
-            Goal = goal;
-            Remaining = remaining;
-        }
-
-        public Node Goal { get; }
-        public bool Remaining { get; }
-    }
-
     class IDDFS : Search
     {
         private Node focus;
@@ -28,6 +16,23 @@ namespace Search
         private bool maxDepthReached;
 
         private List<Node> iterationCheckedNodes;
+
+        /// <summary>
+        /// Denotes the result of each iteration of the search
+        /// </summary>
+        class SearchResult
+        {
+            public SearchResult(Node goal, bool remaining)
+            {
+                Goal = goal;
+                Remaining = remaining;
+            }
+
+            // the node that reaches the goal
+            public Node Goal { get; }
+            // if there is still more to search
+            public bool Remaining { get; }
+        }
 
         public IDDFS(Node startingNode) : base(startingNode)
         {
@@ -95,7 +100,8 @@ namespace Search
                         inCurPath = true;
                     }
                 }
-                if (inCurPath)
+                // jump out of cycle if in current path
+                if (inCurPath) 
                     continue;
 
                 SearchResult result = RecursiveSearch(child, depth - 1);

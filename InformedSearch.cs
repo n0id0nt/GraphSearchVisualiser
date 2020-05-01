@@ -44,6 +44,11 @@ namespace Search
             return score;
         }
 
+        /// <summary>
+        /// Finds the cost of the Nodes current path
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns>the path cast</returns>
         protected int NodeCost(Node node)
         {
             // each move has a uniform cost of one

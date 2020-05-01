@@ -15,6 +15,11 @@ namespace Search
         {
         }
 
+        /// <summary>
+        /// Sets the search method of the agent
+        /// </summary>
+        /// <param name="method">The new search method</param>
+        /// <returns>Whether the method was successfully changed</returns>
         public bool setSearch(string method)
         {
             switch (method)
@@ -43,6 +48,11 @@ namespace Search
             return true;
         }
 
+        /// <summary>
+        /// sets a search method and preforms that search
+        /// </summary>
+        /// <param name="method"></param>
+        /// <returns>The path of the search method </returns>
         public string Search(string method)
         {
             if (setSearch(method))
@@ -59,12 +69,20 @@ namespace Search
             }
         }
 
+        /// <summary>
+        /// runs the update function to step through the search methods visualisation
+        /// </summary>
         public void Update()
         {
             if (searchMethod is Search)
                 searchMethod.Update();
         }
 
+        /// <summary>
+        /// draws self to the screen with the search method
+        /// </summary>
+        /// <param name="cellSize"></param>
+        /// <param name="window"></param>
         public void Draw(int cellSize, RenderWindow window)
         {
             RectangleShape rect = new RectangleShape(new SFML.System.Vector2f(cellSize - 8, cellSize - 8));

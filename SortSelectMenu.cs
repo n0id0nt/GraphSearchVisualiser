@@ -19,6 +19,12 @@ namespace Search
             "RBFS"
         };
 
+        /// <summary>
+        /// calculates the row of the mouse click
+        /// </summary>
+        /// <param name="gridWidth">the height of the row</param>
+        /// <param name="mousePos">the mouse position</param>
+        /// <returns>the row of the mouse click</returns>
         static public int SelectSort(int gridWidth, SFML.System.Vector2i mousePos)
         {
             if (mousePos.X < gridWidth)
@@ -29,6 +35,11 @@ namespace Search
             
         }
 
+        /// <summary>
+        /// draws the Menu to the screen
+        /// </summary>
+        /// <param name="xOffset"> the x offset which the screen is drawn on</param>
+        /// <param name="window"> the window to draw to </param>
         static public void DrawMenu(int xOffset, RenderWindow window)
         {
             Font font = new Font("fonts\\arial.ttf");

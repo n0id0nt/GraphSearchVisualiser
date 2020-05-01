@@ -8,8 +8,8 @@ namespace Search
 {
     class GBFS : InformedSearch
     {
-        private List<Node> fronteir;
-        private Node focus;
+        private List<Node> fronteir; 
+        private Node focus; 
 
         private bool finished;
 
