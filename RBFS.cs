@@ -189,28 +189,37 @@ namespace Search
             {
                 CircleShape circleChecked = new CircleShape(cellSize / 4);
                 circleChecked.Origin = new SFML.System.Vector2f(cellSize / 4, cellSize / 4);
-                circleChecked.FillColor = new Color(156, 18, 0);
+                circleChecked.FillColor = new Color(156, 18, 0, 130);
                 circleChecked.Position = new SFML.System.Vector2f(node.X * cellSize + cellSize / 2, node.Y * cellSize + cellSize / 2);
                 window.Draw(circleChecked);
-                if (node.Parent is Node)
+            }
+
+            foreach (SearchResult node in focus)
+            {
+                if (node.Result.Parent is Node)
                 {
                     VertexArray line = new VertexArray(PrimitiveType.LineStrip, 2);
 
                     Vertex vertex0 = new Vertex();
-                    vertex0.Position = new SFML.System.Vector2f(node.X * cellSize + cellSize / 2, node.Y * cellSize + cellSize / 2);
+                    vertex0.Position = new SFML.System.Vector2f(node.Result.X * cellSize + cellSize / 2, node.Result.Y * cellSize + cellSize / 2);
                     vertex0.Color = Color.Black;
                     line[0] = vertex0;
 
                     Vertex vertex1 = new Vertex();
-                    vertex1.Position = new SFML.System.Vector2f(node.Parent.X * cellSize + cellSize / 2, node.Parent.Y * cellSize + cellSize / 2);
+                    vertex1.Position = new SFML.System.Vector2f(node.Result.Parent.X * cellSize + cellSize / 2, node.Result.Parent.Y * cellSize + cellSize / 2);
                     vertex1.Color = Color.Black;
                     line[1] = vertex1;
 
                     window.Draw(line);
                 }
+                CircleShape circleChecked = new CircleShape(cellSize / 4);
+                circleChecked.Origin = new SFML.System.Vector2f(cellSize / 4, cellSize / 4);
+                circleChecked.FillColor = new Color(156, 18, 0);
+                circleChecked.Position = new SFML.System.Vector2f(node.Result.X * cellSize + cellSize / 2, node.Result.Y * cellSize + cellSize / 2);
+                window.Draw(circleChecked);
             }
 
-            //if (finished)
+            if (finished)
             {
                 CircleShape circle = new CircleShape(cellSize / 3);
                 circle.Origin = new SFML.System.Vector2f(cellSize / 3, cellSize / 3);
@@ -245,7 +254,7 @@ namespace Search
                     p = p.Parent;
                 }
             }
-            //else
+            else
             {
                 CircleShape circlefrontier = new CircleShape(cellSize / 3);
                 circlefrontier.Origin = new SFML.System.Vector2f(cellSize / 3, cellSize / 3);
