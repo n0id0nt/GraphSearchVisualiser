@@ -102,18 +102,18 @@ namespace Search
                     }
                 }
                 // jump out of cycle if in current path
-                if (inCurPath) 
-                    continue;
-
-                Count++;
-                SearchResult result = RecursiveSearch(child, depth - 1);
-                if (result.Goal is Node)
+                if (!inCurPath)
                 {
-                    return result;
-                }
-                if (result.Remaining)
-                {
-                    remaining = true;
+                    Count++;
+                    SearchResult result = RecursiveSearch(child, depth - 1);
+                    if (result.Goal is Node)
+                    {
+                        return result;
+                    }
+                    if (result.Remaining)
+                    {
+                        remaining = true;
+                    }
                 }
             }
             return new SearchResult(null, remaining);

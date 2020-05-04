@@ -13,7 +13,14 @@ namespace Search
 
         private int returnValue;
 
-        private int state; // the state of the update function -1 moving into 0 looping through 1 moving out
+        private State state; // the state of the update function -1 moving into 0 looping through 1 moving out
+
+        enum State
+        {
+            IN,
+            CONTINUE,
+            OUT
+        }
 
         private bool finished;
 
@@ -41,19 +48,18 @@ namespace Search
         public RBFS(Node startingNode, Enviroment enviroment) : base(startingNode, enviroment)
         {
             focus = new List<SearchResult>();
-            focus.Add(new SearchResult(StartingNode, int.MaxValue));
+            focus.Add(new SearchResult(StartingNode, 0));
             limit = new List<int>();
             limit.Add(int.MaxValue);
             finished = false;
-            state = -1;
+            state = State.IN;
             score = new List<List<SearchResult>>();
             Count = 0;
         }
 
         public override string RunSearch()
         {
-            int score = int.MaxValue;
-            Node result = RecursiveSearch(new SearchResult(StartingNode, score), score).Result;
+            Node result = RecursiveSearch(new SearchResult(StartingNode, int.MaxValue), int.MaxValue).Result;
 
             if (result is Node)
             {
@@ -114,7 +120,7 @@ namespace Search
 
         public override void Update()
         {
-            if (state == -1)
+            if (state == State.IN)
             {
                 // checks if node is at goal
                 if (focus[0].Result.Cell == CellTypes.GOAL)
@@ -123,7 +129,7 @@ namespace Search
                     return;
                 }
 
-                state = 0;
+                state = State.CONTINUE;
 
                 score.Insert(0, new List<SearchResult>());
 
@@ -151,32 +157,32 @@ namespace Search
                 if (score[0].Count == 0)
                 {
                     returnValue = int.MaxValue;
-                    state = 1;
+                    state = State.OUT;
                     score.RemoveAt(0);
                 }
                 return;
             }
 
-            if (state == 0)
+            if (state == State.CONTINUE)
             {
                 SearchResult best = score[0].OrderBy(n => n.CostLimit).First();
                 if (best.CostLimit > limit[0] || best.CostLimit == int.MaxValue)
                 {
                     returnValue = best.CostLimit;
-                    state = 1;
+                    state = State.OUT;
                     score.RemoveAt(0);
                     return;
                 }
                 // enter into next depth 
                 focus.Insert(0, best);
                 limit.Insert(0, (score[0].Count > 1) ? Math.Min(limit[0], score[0].OrderBy(n => n.CostLimit).ElementAt(1).CostLimit) : limit[0]);
-                state = -1;
+                state = State.IN;
                 return;
             }
             
-            if (state == 1)
+            if (state == State.OUT)
             {
-                state = 0;
+                state = State.CONTINUE;
                 focus[0].CostLimit = returnValue;
                 focus.RemoveAt(0);
                 limit.RemoveAt(0);
